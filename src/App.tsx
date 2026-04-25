@@ -1,5 +1,28 @@
 import { useState, useEffect } from 'react'
 
+type Weather = {
+  temperature: number
+  windspeed: number
+  winddirection: number
+  weathercode: number
+  is_day: number
+  time: string
+}
+
+type GeocodingResult = {
+  name: string
+  latitude: number
+  longitude: number
+}
+
+type GeocodingResponse = {
+  results?: GeocodingResult[]
+}
+
+type WeatherResponse = {
+  current_weather: Weather
+}
+
 const getWeatherLabel = (code: number) => {
   if (code === 0) return '☀️ 快晴'
   if (code <= 2) return '🌤 晴れ'
@@ -10,7 +33,7 @@ const getWeatherLabel = (code: number) => {
 }
 
 function App() {
-  const [weather, setWeather] = useState(null)
+  const [weather, setWeather] = useState<Weather | null>(null)
   const [city, setCity] = useState('')
   const [cityName, setCityName] = useState('札幌')
   const [error, setError] = useState('')
@@ -22,14 +45,14 @@ function App() {
   const fetchWeather = (lat: number, lon: number) => {
     fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
       .then(res => res.json())
-      .then(data => setWeather(data.current_weather))
+      .then((data: WeatherResponse) => setWeather(data.current_weather))
   }
 
   const handleSearch = () => {
     setError('')
     fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=ja`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: GeocodingResponse) => {
         if (!data.results || data.results.length === 0) {
           setError('都市が見つかりませんでした')
           return
@@ -48,6 +71,7 @@ function App() {
         placeholder="都市名を入力"
         value={city}
         onChange={e => setCity(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleSearch()}
         className="border px-3 py-2 text-base rounded"
       />
       <button
