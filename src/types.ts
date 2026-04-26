@@ -20,3 +20,5 @@ export type GeocodingResult = {
 export type GeocodingResponse = {
     results?: GeocodingResult[]
 }
+
+export type Status = 'loading' | 'success' | 'error'
