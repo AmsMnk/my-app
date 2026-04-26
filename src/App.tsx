@@ -1,36 +1,7 @@
 import { useState, useEffect } from 'react'
-
-type Weather = {
-  temperature: number
-  windspeed: number
-  winddirection: number
-  weathercode: number
-  is_day: number
-  time: string
-}
-
-type GeocodingResult = {
-  name: string
-  latitude: number
-  longitude: number
-}
-
-type GeocodingResponse = {
-  results?: GeocodingResult[]
-}
-
-type WeatherResponse = {
-  current_weather: Weather
-}
-
-const getWeatherLabel = (code: number) => {
-  if (code === 0) return '☀️ 快晴'
-  if (code <= 2) return '🌤 晴れ'
-  if (code <= 48) return '☁️ 曇り'
-  if (code <= 67) return '🌧 雨'
-  if (code <= 77) return '🌨 雪'
-  return '⛈ 荒天'
-}
+import SearchBox from './components/SearchBox'
+import WeatherCard from './components/WeatherCard'
+import type { Weather, WeatherResponse, GeocodingResponse } from './types'
 
 function App() {
   const [weather, setWeather] = useState<Weather | null>(null)
@@ -66,33 +37,16 @@ function App() {
   return (
     <div className="text-center mt-12">
       <h1 className="text-3xl font-bold mb-6">🌤 お天気アプリ</h1>
-      <input
-        type="text"
-        placeholder="都市名を入力"
-        value={city}
-        onChange={e => setCity(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && handleSearch()}
-        className="border px-3 py-2 text-base rounded"
-      />
-      <button
-        onClick={handleSearch}
-        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-        検索
-      </button>
+      <SearchBox city={city} setCity={setCity} onSearch={handleSearch} />
       {error && <p className="text-red-500 mt-4">{error}</p>}
       <div className="mt-8">
         {weather ? (
-          <div className="text-lg space-y-2">
-            <p className="text-xl font-bold">{cityName}</p>
-            <p>{getWeatherLabel(weather.weathercode)}</p>
-            <p>気温：{weather.temperature}℃</p>
-            <p>風速：{weather.windspeed} km/h</p>
-          </div>
+          <WeatherCard cityName={cityName} weather={weather} />
         ) : (
           <p className="text-gray-500">取得中...</p>
         )}
       </div>
-    </div>
+    </div >
   )
 }
 
