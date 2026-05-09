@@ -23,17 +23,27 @@ const formatDate = (dareStr: string) => {
 
 function ForecastList({ daily }: Props) {
     return (
-        <div className="mt-8">
-            <h2 className="test-lg font-bold mb-4">週間予報</h2>
-            <div className="flex justify-center gap-2 flex-wrap">
+        <div className="mt-12 max-w-3xl mx-auto">
+            <p className="text-xs tracking-widest uppercase mb-4 text-center" style={{ color: 'var(--color-muted)' }}>
+                5 Days Forecast
+            </p>
+            <div className="flex justify-center gap-3 flex-wrap">
                 {daily.slice(0, 5).map(day => (
-                    <div key={day.date} className="border rounded p-3 w-24">
-                        <p className="text-sm">{formatDate(day.date)}</p>
-                        <p className="text-2xl my-2">{getWeatherLabel(day.weathercode)}</p>
-                        <p className="text-xs">
-                            <span className="text-red-500">{day.maxTemp}°</span>
-                            {' / '}
-                            <span className="text-blue-500">{day.minTemp}°</span>
+                    <div
+                        key={day.date}
+                        className="rounded-xl p-4 w-24 border"
+                        style={{
+                            backgroundColor: 'var(--color-card)',
+                            borderColor: 'var(--color-border)',
+                        }}
+                    >
+                        <p className="text-xs mb-3" style={{ color: 'var(--color-muted)' }}>
+                            {formatDate(day.date)}
+                        </p>
+                        <p className="text-3xl my-2">{getWeatherLabel(day.weathercode)}</p>
+                        <p className="text-xs font-mono mt-3 space-y-1">
+                            <span className="block text-rose-500 opacity-70">{day.maxTemp.toFixed(1)}°</span>
+                            <span className="block text-sky-500 opacity-70">{day.minTemp.toFixed(1)}°</span>
                         </p>
                     </div>
                 ))}

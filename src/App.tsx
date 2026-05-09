@@ -36,7 +36,7 @@ function App() {
       })
       .catch(() => {
         setStatus('error')
-        setErrorMessage('天気情報の取得に失敗しました')
+        setErrorMessage('Failed to fetch weather data')
       })
   }
 
@@ -56,7 +56,7 @@ function App() {
       .then((data: GeocodingResponse) => {
         if (!data.results || data.results.length === 0) {
           setStatus('error')
-          setErrorMessage('都市が見つかりませんでした')
+          setErrorMessage('City not found')
           return
         }
         const result = data.results[0]
@@ -71,23 +71,41 @@ function App() {
   }
 
   return (
-    <div className="text-center mt-12">
-      <h1 className="text-3xl font-bold mb-6" >🌤 お天気アプリ</h1>
-      <SearchBox city={city} setCity={setCity} onSearch={handleSearch} />
-      {status === 'error' && <p className="text-red-500 mt-4">{errorMessage}</p>}
-      <div className="mt-8">
-        {status === 'loading' &&
-          <>
-            <p className="text-gray-500">取得中...</p>
-            <Spinner />
-          </>
-        }
-        {status === 'success' && weather && (
-          <>
-            <WeatherCard cityName={cityName} weather={weather} />
-            {daily && <ForecastList daily={daily} />}
-          </>
+    <div className="min-h-screen flex justify-center px-6 py-20">
+      <div className="w-full max-w-4xl text-center">
+        <div className="mb-12">
+          <h1 className="text-xs tracking-[0.3em] uppercase font-light" style={{ color: 'var(--color-muted)' }}>
+            Weather
+          </h1>
+          <p className="text-3xl font-extralight mt-2">天気予報</p>
+        </div>
+
+        <div className="mb-12">
+          <SearchBox city={city} setCity={setCity} onSearch={handleSearch} />
+        </div>
+
+        {status === 'error' && (
+          <p className="text-xs tracking-widest uppercase mt-6 text-rose-500 opacity-70">
+            {errorMessage}
+          </p>
         )}
+
+        <div className="mt-8">
+          {status === 'loading' && (
+            <>
+              <p className="text-xs tracking-widest uppercase mb-4" style={{ color: 'var(--color-muted)' }}>
+                Loading
+              </p>
+              <Spinner />
+            </>
+          )}
+          {status === 'success' && weather && (
+            <>
+              <WeatherCard cityName={cityName} weather={weather} />
+              {daily && <ForecastList daily={daily} />}
+            </>
+          )}
+        </div>
       </div>
     </div>
   )

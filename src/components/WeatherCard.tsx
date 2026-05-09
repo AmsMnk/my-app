@@ -16,11 +16,24 @@ const getWeatherLabel = (code: number) => {
 
 function WeatherCard({ cityName, weather }: Props) {
     return (
-        <div className="text-lg space-y-2">
-            <p className="text-xl font-bold">{cityName}</p>
-            <p>{getWeatherLabel(weather.weathercode)}</p>
-            <p>気温：{weather.temperature}℃</p>
-            <p>風速：{weather.windspeed} km/h</p>
+        <div
+            className="max-w-sm mx-auto p-8 rounded-2xl border"
+            style={{
+                backgroundColor: 'var(--color-card)',
+                borderColor: 'var(--color-border)',
+            }}
+        >
+            <p className="text-xs tracking-widest uppercase mb-2" style={{ color: 'var(--color-muted)' }}>
+                Current Weather
+            </p>
+            <p className="text-2xl font-light mb-6">{cityName}</p>
+            <p className="text-5xl font-extralight font-mono mb-6">
+                {weather.temperature.toFixed(1)}°
+            </p>
+            <div className="space-y-1 text-sm" style={{ color: 'var(--color-muted)' }}>
+                <p>{getWeatherLabel(weather.weathercode)}</p>
+                <p className="font-mono">Wind {weather.windspeed.toFixed(1)} km/h</p>
+            </div>
         </div>
     )
 }
