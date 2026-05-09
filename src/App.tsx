@@ -4,6 +4,7 @@ import WeatherCard from './components/WeatherCard'
 import Spinner from './components/Spinner'
 import ForecastList from './components/ForecastList'
 import { parseDailyForecast } from './utils'
+import { cities } from './cities'
 import type { Weather, ForecastResponse, GeocodingResponse, Status, ForecastDay } from './types'
 
 function App() {
@@ -15,7 +16,14 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
-    fetchWeather(43.06, 141.35)
+    const saved = localStorage.getItem('lastCity')
+    if (saved) {
+      const { lat, lon, name } = JSON.parse(saved)
+      setCityName(name)
+      fetchWeather(lat, lon)
+    } else {
+      fetchWeather(43.06, 141.35)
+    }
   }, [])
 
   const fetchWeather = (lat: number, lon: number) => {
@@ -32,9 +40,18 @@ function App() {
       })
   }
 
-  const handleSearch = () => {
+  const handleSearch = (queryOverride?: string) => {
+    let searchQuery = queryOverride ?? city
+    if (!searchQuery) return
+
+    // 辞書にマッチする都市があればローマ字に変換
+    if (!queryOverride) {
+      const matched = cities.find(c => c.name === searchQuery || c.reading === searchQuery)
+      if (matched) searchQuery = matched.query
+    }
+
     setErrorMessage('')
-    fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=ja`)
+    fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${searchQuery}&count=1&language=ja`)
       .then(res => res.json())
       .then((data: GeocodingResponse) => {
         if (!data.results || data.results.length === 0) {
@@ -44,6 +61,11 @@ function App() {
         }
         const result = data.results[0]
         setCityName(result.name)
+        localStorage.setItem('lastCity', JSON.stringify({
+          name: result.name,
+          lat: result.latitude,
+          lon: result.longitude
+        }))
         fetchWeather(result.latitude, result.longitude)
       })
   }
