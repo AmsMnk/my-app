@@ -135,8 +135,8 @@ function App() {
                                 cityName={cityName}
                                 weather={weather}
                             />
-                            {daily && <ForecastList daily={daily} />}
                             {hourly && <HourlyForecastList hourly={hourly} />}
+                            {daily && <ForecastList daily={daily} />}
                         </>
                     )}
                 </div>
