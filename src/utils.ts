@@ -1,4 +1,9 @@
-import type { DailyForecastRaw, ForecastDay } from './types'
+import type {
+    DailyForecastRaw,
+    ForecastDay,
+    HourlyForecastRaw,
+    HourlyForecast,
+} from './types'
 import { cities } from './cities'
 import type { City } from './cities'
 
@@ -11,12 +16,25 @@ export const parseDailyForecast = (raw: DailyForecastRaw): ForecastDay[] => {
     }))
 }
 
+export const parseHourlyForecast = (
+    raw: HourlyForecastRaw,
+): HourlyForecast[] => {
+    const currentHour = new Date().getHours()
+    const all = raw.time.map((time, i) => ({
+        time,
+        temperature: raw.temperature_2m[i],
+        weathercode: raw.weathercode[i],
+    }))
+    return all.slice(currentHour, currentHour + 24)
+}
+
 export const searchCities = (input: string): City[] => {
     if (!input) return []
     const lower = input.toLowerCase()
-    return cities.filter(city =>
-        city.name.includes(input) ||
-        city.reading.includes(input) ||
-        city.query.toLowerCase().includes(lower)
+    return cities.filter(
+        (city) =>
+            city.name.includes(input) ||
+            city.reading.includes(input) ||
+            city.query.toLowerCase().includes(lower),
     )
 }

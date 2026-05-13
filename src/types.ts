@@ -35,9 +35,22 @@ export type ForecastDay = {
     minTemp: number
 }
 
+export type HourlyForecastRaw = {
+    time: string[]
+    temperature_2m: number[]
+    weathercode: number[]
+}
+
+export type HourlyForecast = {
+    time: string
+    temperature: number
+    weathercode: number
+}
+
 export type ForecastResponse = {
     current_weather: Weather
     daily: DailyForecastRaw
+    hourly: HourlyForecastRaw
 }
 
 export type Status = 'loading' | 'success' | 'error'
