@@ -4,8 +4,9 @@ import WeatherCard from './components/WeatherCard'
 import Spinner from './components/Spinner'
 import ForecastList from './components/ForecastList'
 import HourlyForecastList from './components/HourlyForecast'
-import { parseDailyForecast, parseHourlyForecast } from './utils'
+import { parseDailyForecast, parseHourlyForecast, isValidTheme } from './utils'
 import { cities } from './cities'
+import ThemeSwitcher from './components/ThemeSwitcher'
 import type {
     Weather,
     ForecastResponse,
@@ -13,6 +14,7 @@ import type {
     Status,
     ForecastDay,
     HourlyForecast,
+    Theme,
 } from './types'
 
 function App() {
@@ -23,6 +25,10 @@ function App() {
     const [cityName, setCityName] = useState('札幌')
     const [status, setStatus] = useState<Status>('loading')
     const [errorMessage, setErrorMessage] = useState('')
+    const [theme, setTheme] = useState<Theme>(() => {
+        const saved = localStorage.getItem('theme')
+        return isValidTheme(saved) ? saved : 'mode'
+    })
 
     useEffect(() => {
         const saved = localStorage.getItem('lastCity')
@@ -34,6 +40,11 @@ function App() {
             fetchWeather(43.06, 141.35)
         }
     }, [])
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme)
+        localStorage.setItem('theme', theme)
+    }, [theme])
 
     const fetchWeather = (lat: number, lon: number) => {
         setStatus('loading')
@@ -101,6 +112,10 @@ function App() {
                         Weather
                     </h1>
                     <p className="text-3xl font-extralight mt-2">天気予報</p>
+                </div>
+
+                <div className="mb-8">
+                    <ThemeSwitcher theme={theme} setTheme={setTheme} />
                 </div>
 
                 <div className="mb-12">

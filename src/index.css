@@ -1,41 +1,53 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* 共通のフォント設定 */
 body {
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  letter-spacing: 0.05em;
-  min-height: 100vh;
-  background: var(--color-bg);
-  color: var(--color-text);
-  transition: background 0.3s, color 0.3s;
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.05em;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition:
+        background 0.3s,
+        color 0.3s;
 }
 
 /* モード系（デフォルト） */
 :root {
-  --color-bg: #0a0a0a;
-  --color-text: #e5e5e5;
-  --color-card: #1a1a1a;
-  --color-border: #333;
-  --color-accent: #e5e5e5;
-  --color-muted: #666;
+    --color-bg: #0a0a0a;
+    --color-text: #e5e5e5;
+    --color-card: #1a1a1a;
+    --color-border: #333;
+    --color-accent: #e5e5e5;
+    --color-muted: #666;
 }
 
 /* 涼やか */
-[data-theme="cool"] {
-  --color-bg: linear-gradient(135deg, #1e3a8a, #6b21a8);
-  --color-text: #ffffff;
-  --color-card: rgba(255, 255, 255, 0.1);
-  --color-border: rgba(255, 255, 255, 0.2);
-  --color-accent: #93c5fd;
-  --color-muted: #cbd5e1;
+[data-theme='cool'] {
+    --color-bg: linear-gradient(135deg, #1e3a8a, #6b21a8);
+    --color-text: #ffffff;
+    --color-card: rgba(255, 255, 255, 0.1);
+    --color-border: rgba(255, 255, 255, 0.2);
+    --color-accent: #93c5fd;
+    --color-muted: #cbd5e1;
 }
 
 /* 温かみ */
-[data-theme="warm"] {
-  --color-bg: #fafafa;
-  --color-text: #1f2937;
-  --color-card: #ffffff;
-  --color-border: #e5e7eb;
-  --color-accent: #f59e0b;
-  --color-muted: #9ca3af;
+[data-theme='warm'] {
+    --color-bg: #fff7ed;
+    --color-text: #7c2d12;
+    --color-card: #ffedd5;
+    --color-border: #fdba74;
+    --color-accent: #ea580c;
+    --color-muted: #c2410c;
+}
+
+/* ライト */
+[data-theme='light'] {
+    --color-bg: #fafafa;
+    --color-text: #1f2937;
+    --color-card: #ffffff;
+    --color-border: #e5e7eb;
+    --color-accent: #f59e0b;
+    --color-muted: #9ca3af;
 }

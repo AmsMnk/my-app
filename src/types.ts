@@ -54,3 +54,5 @@ export type ForecastResponse = {
 }
 
 export type Status = 'loading' | 'success' | 'error'
+
+export type Theme = 'mode' | 'cool' | 'warm' | 'light'

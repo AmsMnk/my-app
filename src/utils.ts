@@ -6,6 +6,7 @@ import type {
 } from './types'
 import { cities } from './cities'
 import type { City } from './cities'
+import type { Theme } from './types'
 
 export const parseDailyForecast = (raw: DailyForecastRaw): ForecastDay[] => {
     return raw.time.map((date, i) => ({
@@ -36,5 +37,14 @@ export const searchCities = (input: string): City[] => {
             city.name.includes(input) ||
             city.reading.includes(input) ||
             city.query.toLowerCase().includes(lower),
+    )
+}
+
+export const isValidTheme = (value: string | null): value is Theme => {
+    return (
+        value === 'mode' ||
+        value === 'cool' ||
+        value === 'warm' ||
+        value === 'light'
     )
 }
