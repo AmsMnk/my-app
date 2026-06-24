@@ -4,9 +4,10 @@ import WeatherCard from './components/WeatherCard'
 import Spinner from './components/Spinner'
 import ForecastList from './components/ForecastList'
 import HourlyForecastList from './components/HourlyForecast'
+import Splash from './components/Splash'
+import ThemeSwitcher from './components/ThemeSwitcher'
 import { parseDailyForecast, parseHourlyForecast, isValidTheme } from './utils'
 import { cities } from './cities'
-import ThemeSwitcher from './components/ThemeSwitcher'
 import type {
     Weather,
     ForecastResponse,
@@ -29,6 +30,7 @@ function App() {
         const saved = localStorage.getItem('theme')
         return isValidTheme(saved) ? saved : 'mode'
     })
+    const [showSplash, setShowSplash] = useState(true)
 
     useEffect(() => {
         const saved = localStorage.getItem('lastCity')
@@ -102,61 +104,75 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen flex justify-center px-6 py-20">
-            <div className="w-full max-w-4xl text-center">
-                <div className="mb-12">
-                    <h1
-                        className="text-xs tracking-[0.3em] uppercase font-light"
-                        style={{ color: 'var(--color-muted)' }}
-                    >
-                        Weather
-                    </h1>
-                    <p className="text-3xl font-extralight mt-2">天気予報</p>
-                </div>
-
-                <div className="mb-8">
-                    <ThemeSwitcher theme={theme} setTheme={setTheme} />
-                </div>
-
-                <div className="mb-12">
-                    <SearchBox
-                        city={city}
-                        setCity={setCity}
-                        onSearch={handleSearch}
-                    />
-                </div>
-
-                {status === 'error' && (
-                    <p className="text-xs tracking-widest uppercase mt-6 text-rose-500 opacity-70">
-                        {errorMessage}
-                    </p>
-                )}
-
-                <div className="mt-8">
-                    {status === 'loading' && (
-                        <>
-                            <p
-                                className="text-xs tracking-widest uppercase mb-4"
+        <>
+            {showSplash && <Splash onFinish={() => setShowSplash(false)} />}
+            <div
+                className="min-h-screen flex justify-center px-6 py-20 relative"
+                style={{
+                    opacity: showSplash ? 0 : 1,
+                    transition: 'opacity 1.5s ease-in-out',
+                }}
+            >
+                <div className="min-h-screen flex justify-center px-6 py-20 relative">
+                    <div className="w-full max-w-4xl text-center">
+                        <div className="absolute top-6 right-6">
+                            <ThemeSwitcher theme={theme} setTheme={setTheme} />
+                        </div>
+                        <div className="mb-12">
+                            <h1
+                                className="text-xs tracking-[0.3em] uppercase font-light"
                                 style={{ color: 'var(--color-muted)' }}
                             >
-                                Loading
+                                Weather
+                            </h1>
+                            <p className="text-3xl font-extralight mt-2">
+                                天気予報
                             </p>
-                            <Spinner />
-                        </>
-                    )}
-                    {status === 'success' && weather && (
-                        <>
-                            <WeatherCard
-                                cityName={cityName}
-                                weather={weather}
+                        </div>
+
+                        <div className="mb-12">
+                            <SearchBox
+                                city={city}
+                                setCity={setCity}
+                                onSearch={handleSearch}
                             />
-                            {hourly && <HourlyForecastList hourly={hourly} />}
-                            {daily && <ForecastList daily={daily} />}
-                        </>
-                    )}
+                        </div>
+
+                        {status === 'error' && (
+                            <p className="text-xs tracking-widest uppercase mt-6 text-rose-500 opacity-70">
+                                {errorMessage}
+                            </p>
+                        )}
+
+                        <div className="mt-8">
+                            {status === 'loading' && (
+                                <>
+                                    <p
+                                        className="text-xs tracking-widest uppercase mb-4"
+                                        style={{ color: 'var(--color-muted)' }}
+                                    >
+                                        Loading
+                                    </p>
+                                    <Spinner />
+                                </>
+                            )}
+                            {status === 'success' && weather && (
+                                <>
+                                    <WeatherCard
+                                        cityName={cityName}
+                                        weather={weather}
+                                    />
+                                    {hourly && (
+                                        <HourlyForecastList hourly={hourly} />
+                                    )}
+                                    {daily && <ForecastList daily={daily} />}
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

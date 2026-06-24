@@ -1,3 +1,4 @@
+import { Spade, Moon, Coffee, Snowflake } from 'lucide-react'
 import type { Theme } from '../types'
 
 type Props = {
@@ -5,11 +6,11 @@ type Props = {
     setTheme: (theme: Theme) => void
 }
 
-const themes: { value: Theme; label: string }[] = [
-    { value: 'mode', label: 'Mode' },
-    { value: 'cool', label: 'Cool' },
-    { value: 'warm', label: 'Warm' },
-    { value: 'light', label: 'Light' },
+const themes: { value: Theme; label: string; Icon: typeof Spade }[] = [
+    { value: 'mode', label: 'Mode', Icon: Spade },
+    { value: 'cool', label: 'Cool', Icon: Moon },
+    { value: 'warm', label: 'Warm', Icon: Coffee },
+    { value: 'light', label: 'Light', Icon: Snowflake },
 ]
 
 function ThemeSwitcher({ theme, setTheme }: Props) {
@@ -19,7 +20,8 @@ function ThemeSwitcher({ theme, setTheme }: Props) {
                 <button
                     key={t.value}
                     onClick={() => setTheme(t.value)}
-                    className="px-3 py-1 text-xs tracking-widest uppercase border rounded-none transition"
+                    aria-label={t.label}
+                    className="p-2 border rounded-full transition hover:opacity-100"
                     style={{
                         borderColor: 'var(--color-border)',
                         color:
@@ -29,7 +31,7 @@ function ThemeSwitcher({ theme, setTheme }: Props) {
                         opacity: theme === t.value ? 1 : 0.5,
                     }}
                 >
-                    {t.label}
+                    <t.Icon size={16} />
                 </button>
             ))}
         </div>
